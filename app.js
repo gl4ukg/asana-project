@@ -59,7 +59,7 @@ app.post('/setup-webhook', async (req, res) => {
     try {
         const response = await axios.post('https://app.asana.com/api/1.0/webhooks', {
             data: {
-                resource: 1208103547163783,
+                resource: '1208103547163783',
                 target: 'https://asana-project-8a2bcae75952.herokuapp.com/webhook', // Replace with your deployed Heroku app URL
                 filters: [
                     { "action": "changed", "resource_type": "task" }
