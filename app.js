@@ -27,6 +27,8 @@ app.post('/webhook', async (req, res) => {
     console.log(taskResponse,"taskresponse")
                 const task = taskResponse.data.data;
                 const estimatedTimeField = task.custom_fields.find(field => field.name === 'Estimated Time');
+
+                console.log(estimatedTimeField,"estimatedTimeField")
     
                 // Check if Estimated Time field is empty or not filled
                 if (!estimatedTimeField || !estimatedTimeField.number_value) {
