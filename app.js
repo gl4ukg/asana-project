@@ -34,7 +34,9 @@ app.post('/webhook', async (req, res) => {
                 if (!estimatedTimeField || !estimatedTimeField.number_value) {
                     // Notify the user that they need to fill in the estimated time
                     await axios.post(`https://app.asana.com/api/1.0/tasks/${taskId}/stories`, {
-                        text: "Please add an estimated time before marking this task as complete."
+                        data: {
+                            text: "Please add an estimated time before marking this task as complete."
+                        }
                     }, {
                         headers: {
                             'Authorization': `Bearer ${ASANA_ACCESS_TOKEN}`
