@@ -45,7 +45,9 @@ app.post('/webhook', async (req, res) => {
     
                     // Revert the task status back to "In Progress" or any other status
                     await axios.put(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
-                        completed: false
+                        data: {
+                            completed: false
+                        }
                     }, {
                         headers: {
                             'Authorization': `Bearer ${ASANA_ACCESS_TOKEN}`
