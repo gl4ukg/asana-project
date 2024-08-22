@@ -6,11 +6,12 @@ app.use(express.json());
 
 const ASANA_ACCESS_TOKEN = '2/1208103241103229/1208103794237447:e084e90d37786fa8f5b6725a1434b745'; // Replace with your Asana access token
 const ASANA_WORKSPACE_ID = '1208103547163783'; // Replace with your Asana workspace ID
-const PROJECT_ID = '1208103379276834'; // Replace with your Asana project ID
+const PROJECT_ID = '1208103547163783'; // Replace with your Asana project ID
 
 // Endpoint to receive webhook events
 app.post('/webhook', async (req, res) => {
     const event = req.body.events[0];
+    console.log(event,"we do have event")
 
     if (event.resource_type === 'task' && event.action === 'changed') {
         const taskId = event.resource;
@@ -59,19 +60,19 @@ app.post('/setup-webhook', async (req, res) => {
     try {
         const response = await axios.post('https://app.asana.com/api/1.0/webhooks', {
             data: {
-                resource: '1208103379276834',
+                resource: '1208103547163783',
                 target: 'https://asana-project-8a2bcae75952.herokuapp.com/webhook', // Replace with your deployed Heroku app URL
                 filters: [
                     { 
                         "action": "changed", 
                         "resource_type": "task",
-                        "custom_fields": [ "Estimated Time"] 
+                        // "custom_fields": [ "Estimated Time"] 
                     }
                 ]
             }
         }, {
             headers: {
-                'Authorization': `Bearer 2/1208103241103229/1208103794237447:e084e90d37786fa8f5b6725a1434b745`
+                'Authorization': `Bearer ${ASANA_ACCESS_TOKEN}`
             }
         });
 
