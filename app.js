@@ -14,8 +14,8 @@ app.post('/webhook', async (req, res) => {
         const event = req.body.events[0];
         console.log(event,"we do have event")
     
-        if (event.resource_type === 'task' && event.action === 'changed') {
-            const taskId = event.resource;
+        if (event.resource.resource_type === 'task' && event.action === 'changed') {
+            const taskId = event.resource.gid;
     
             try {
                 // Get task details
@@ -56,9 +56,11 @@ app.post('/webhook', async (req, res) => {
     } catch(err) {
         console.log(err)
     }
-    const ASANA_SECRET = req.headers['x-hook-secret'];
-    res.setHeader('x-hook-secret', ASANA_SECRET)
-    res.status(200).send(req.body);
+    if(req.header['x-hook-secret']) {
+        const ASANA_SECRET = req.headers['x-hook-secret'];
+        res.setHeader('x-hook-secret', ASANA_SECRET)
+        res.status(200).send(req.body);
+    }
 });
 
 // Endpoint to set up the webhook (one-time setup)
