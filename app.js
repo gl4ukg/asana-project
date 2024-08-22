@@ -54,7 +54,7 @@ app.post('/webhook', async (req, res) => {
 
     // res.status(200).send('OK');
     const ASANA_SECRET = req.headers['X-Hook-Secret'];
-    res.set('X-Hook-Secret', ASANA_SECRET)
+    res.setHeader('X-Hook-Secret', ASANA_SECRET)
     res.status(200).send(req.body);
 });
 
