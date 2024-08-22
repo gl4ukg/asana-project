@@ -10,49 +10,48 @@ const PROJECT_ID = '1208103547163783'; // Replace with your Asana project ID
 
 // Endpoint to receive webhook events
 app.post('/webhook', async (req, res) => {
-    // const event = req.body.events[0];
-    // console.log(event,"we do have event")
+    const event = req.body.events[0];
+    console.log(event,"we do have event")
 
-    // if (event.resource_type === 'task' && event.action === 'changed') {
-    //     const taskId = event.resource;
+    if (event.resource_type === 'task' && event.action === 'changed') {
+        const taskId = event.resource;
 
-    //     try {
-    //         // Get task details
-    //         const taskResponse = await axios.get(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${ASANA_ACCESS_TOKEN}`
-    //             }
-    //         });
+        try {
+            // Get task details
+            const taskResponse = await axios.get(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
+                headers: {
+                    'Authorization': `Bearer ${ASANA_ACCESS_TOKEN}`
+                }
+            });
 
-    //         const task = taskResponse.data.data;
-    //         const estimatedTimeField = task.custom_fields.find(field => field.name === 'Estimated Time');
+            const task = taskResponse.data.data;
+            const estimatedTimeField = task.custom_fields.find(field => field.name === 'Estimated Time');
 
-    //         // Check if Estimated Time field is empty or not filled
-    //         if (!estimatedTimeField || !estimatedTimeField.number_value) {
-    //             // Notify the user that they need to fill in the estimated time
-    //             await axios.post(`https://app.asana.com/api/1.0/tasks/${taskId}/stories`, {
-    //                 text: "Please add an estimated time before marking this task as complete."
-    //             }, {
-    //                 headers: {
-    //                     'Authorization': `Bearer ${ASANA_ACCESS_TOKEN}`
-    //                 }
-    //             });
+            // Check if Estimated Time field is empty or not filled
+            if (!estimatedTimeField || !estimatedTimeField.number_value) {
+                // Notify the user that they need to fill in the estimated time
+                await axios.post(`https://app.asana.com/api/1.0/tasks/${taskId}/stories`, {
+                    text: "Please add an estimated time before marking this task as complete."
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${ASANA_ACCESS_TOKEN}`
+                    }
+                });
 
-    //             // Revert the task status back to "In Progress" or any other status
-    //             await axios.put(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
-    //                 completed: false
-    //             }, {
-    //                 headers: {
-    //                     'Authorization': `Bearer ${ASANA_ACCESS_TOKEN}`
-    //                 }
-    //             });
-    //         }
-    //     } catch (error) {
-    //         console.error('Error handling webhook event:', error.response.data);
-    //     }
-    // }
+                // Revert the task status back to "In Progress" or any other status
+                await axios.put(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
+                    completed: false
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${ASANA_ACCESS_TOKEN}`
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error handling webhook event:', error.response.data);
+        }
+    }
 
-    // res.status(200).send('OK');
     const ASANA_SECRET = req.headers['x-hook-secret'];
     res.setHeader('x-hook-secret', ASANA_SECRET)
     res.status(200).send(req.body);
